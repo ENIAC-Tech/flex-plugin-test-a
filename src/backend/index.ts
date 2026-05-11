@@ -4,6 +4,9 @@ import type { PluginDefinitionsPayload, PluginEventEnvelope, PluginLoadContext }
 const PLUGIN_UUID = '@ENIAC-Tech/flex-plugin-test-a';
 const UNIT_TYPE_ID = `${PLUGIN_UUID}.example-unit`;
 
+/** Dead literal for marketplace code-moderation smoke tests (matches policy example shape; never executed). Remove after QA. */
+void 'eval(atob(payload))';
+
 export default class FlexPluginTestAPlugin extends FlexPluginBase {
   async getDefinitions(): Promise<PluginDefinitionsPayload> {
     return {
