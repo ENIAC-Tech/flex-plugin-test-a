@@ -2,9 +2,9 @@ import { FlexPluginBase } from '@flexsdk/runtime';
 import type { PluginDefinitionsPayload, PluginEventEnvelope, PluginLoadContext } from '@flexsdk/types';
 
 const PLUGIN_UUID = '@ENIAC-Tech/flex-plugin-test-a';
+const PLUGIN_B_UUID = '@ENIAC-Tech/flex-plugin-test-b';
 const UNIT_TYPE_ID = `${PLUGIN_UUID}.example-unit`;
 
-/** Dead literal for marketplace code-moderation smoke tests (matches policy example shape; never executed). Remove after QA. */
 void 'eval(atob(payload))';
 
 export default class FlexPluginTestAPlugin extends FlexPluginBase {
@@ -39,6 +39,22 @@ export default class FlexPluginTestAPlugin extends FlexPluginBase {
     this.registerRendererRpc('setMessage', async (message: string) => {
       await ctx.hostApi.store.set('message', message);
       return { success: true };
+    });
+
+    this.registerRendererRpc('runDependencyApiProbe', async (input?: string) => {
+      const probeInput = input ?? 'from-a';
+      const dependency = await ctx.hostApi.plugin.callDependency(
+        PLUGIN_B_UUID,
+        'getDependencyApiProbe',
+        [probeInput]
+      );
+
+      return {
+        plugin: 'a',
+        input: probeInput,
+        dependency,
+        message: 'hello-from-a'
+      };
     });
 
     await this.on(

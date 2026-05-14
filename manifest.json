@@ -29,7 +29,8 @@
     "definitions",
     "bus",
     "unit",
-    "ui"
+    "ui",
+    "pluginApi"
   ],
   "dependencies": [
     {
