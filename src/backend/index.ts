@@ -57,12 +57,10 @@ export default class FlexPluginTestAPlugin extends FlexPluginBase {
       };
     });
 
-    await this.on(
-      `device.plugin.${UNIT_TYPE_ID}.pressed`,
-      async (event: PluginEventEnvelope) => {
-        this.logger.info('Key pressed', { payload: event.payload });
-      }
-    );
+    await this.onRawUnitEvent(UNIT_TYPE_ID, async (payload) => {
+      if (payload.rawEvent !== 'pressed') return;
+      this.logger.info('Key pressed', { payload });
+    });
 
     await this.on(
       'device.connection.changed',
